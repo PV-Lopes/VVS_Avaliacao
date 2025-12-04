@@ -1,71 +1,71 @@
-const { Builder, By, until } = require('selenium-webdriver');
+const { Builder, By, until } = require("selenium-webdriver");
+const chrome = require("selenium-webdriver/chrome");
+const chromedriver = require("chromedriver");
 
-const SITE = process.env.SITE_URL || 'http://localhost:8080'; // set via env if needed
-const TIMEOUT = 10000;
+jest.setTimeout(40000);
 
-async function flowLoadUsers(driver) {
-  await driver.get(SITE);
-  await driver.findElement(By.id('load-users')).click();
-  await driver.wait(until.elementsLocated(By.css('.user')), TIMEOUT);
-  const users = await driver.findElements(By.css('.user'));
-  return users.length;
-}
+describe("Functional Tests", () => {
+  let driver;
 
-async function flowOpenWebsiteNewTab(driver) {
-  await driver.get(SITE);
-  await driver.findElement(By.id('load-users')).click();
-  await driver.wait(until.elementsLocated(By.css('.user a')), TIMEOUT);
-  const link = await driver.findElement(By.css('.user a'));
-  // open link (target=_blank) by clicking
-  await link.click();
-  // wait for new window handle
-  await driver.wait(async () => {
+  beforeAll(async () => {
+    const serviceBuilder = new chrome.ServiceBuilder(chromedriver.path);
+
+    const options = new chrome.Options();
+    options.addArguments("--headless=new");
+    options.addArguments("--disable-gpu");
+    options.addArguments("--no-sandbox");
+    options.addArguments("--disable-dev-shm-usage");
+
+    driver = await new Builder()
+      .forBrowser("chrome")
+      .setChromeOptions(options)
+      .setChromeService(serviceBuilder)
+      .build();
+  }, 35000);
+
+  afterAll(async () => {
+    if (driver) await driver.quit();
+  });
+
+  test("Fluxo 1 - Carregar usuários", async () => {
+    await driver.get("http://localhost:8080");
+    await driver.findElement(By.id("load-users")).click();
+
+    const users = await driver.wait(
+      until.elementsLocated(By.css(".user")),
+      15000
+    );
+
+    expect(users.length).toBeGreaterThan(0);
+  });
+
+  test("Fluxo 2 - Abrir website em nova aba", async () => {
+    await driver.get("http://localhost:8080");
+    await driver.findElement(By.id("load-users")).click();
+
+    const link = await driver.wait(
+      until.elementLocated(By.css(".user a")),
+      15000
+    );
+
+    await link.click();
+
     const handles = await driver.getAllWindowHandles();
-    return handles.length >= 2;
-  }, TIMEOUT);
-  const handles = await driver.getAllWindowHandles();
-  return handles.length;
-}
+    expect(handles.length).toBeGreaterThan(1);
+  });
 
-async function flowNoDuplicateOnDoubleClick(driver) {
-  await driver.get(SITE);
-  await driver.findElement(By.id('load-users')).click();
-  await driver.wait(until.elementsLocated(By.css('.user')), TIMEOUT);
-  const firstCount = (await driver.findElements(By.css('.user'))).length;
-  // click again
-  await driver.findElement(By.id('load-users')).click();
-  await driver.wait(until.elementsLocated(By.css('.user')), TIMEOUT);
-  const secondCount = (await driver.findElements(By.css('.user'))).length;
-  return { firstCount, secondCount };
-}
+  test("Fluxo 3 - Lista não duplica", async () => {
+    await driver.get("http://localhost:8080");
+    const btn = await driver.findElement(By.id("load-users"));
 
-(async function runAll() {
-  const driver = await new Builder()
-    .forBrowser('chrome')
-    .build();
-  try {
-    console.log('Flow 1: Load Users');
-    const count = await flowLoadUsers(driver);
-    console.log('Users count after load:', count);
+    await btn.click();
+    await driver.wait(until.elementsLocated(By.css(".user")), 15000);
+    const count1 = (await driver.findElements(By.css(".user"))).length;
 
-    console.log('Flow 2: Open website new tab');
-    const handles = await flowOpenWebsiteNewTab(driver);
-    console.log('Window handles:', handles);
+    await btn.click();
+    await driver.wait(until.elementsLocated(By.css(".user")), 15000);
+    const count2 = (await driver.findElements(By.css(".user"))).length;
 
-    console.log('Flow 3: Double click behavior');
-    const counts = await flowNoDuplicateOnDoubleClick(driver);
-    console.log('Counts:', counts);
-
-    // exit code based on simple assertions
-    if (count < 1) process.exit(1);
-    if (handles < 2) process.exit(1);
-    if (counts.secondCount < 1) process.exit(1);
-    console.log('Functional tests OK');
-    process.exit(0);
-  } catch (err) {
-    console.error('Functional test error:', err);
-    process.exit(2);
-  } finally {
-    await driver.quit();
-  }
-})();
+    expect(count2).toBe(count1);
+  });
+});

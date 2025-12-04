@@ -1,0 +1,29 @@
+{
+  "name": "vvs_avaliacao",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests",
+    "test:unit": "jest",
+    "test:functional": "node tests/selenium.functional.test.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:unit": "jest --runTestsByPath ./tests/jester.test.js",
+    "test:functional": "jest --runTestsByPath ./tests/selenium.functional.test.js",
+    "test:all": "npm run test:unit && npm run test:functional"
+  },
+  "keywords": [],
+  "author": "PVLopes",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "selenium-webdriver": "^4.38.0"
+  },
+  "dependencies": {
+    "chromedriver": "^142.0.0"
+  }
+}
