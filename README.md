@@ -33,9 +33,9 @@ O foco principal é demonstrar **boas práticas de testes**, incluindo:
 │── jester.test.js
 │── selenium.functional.test.js
 
-## 🧪 Tipos de Testes
+## Tipos de Testes
 
-### ✔ Testes Unitários (Jest + JSDOM)
+### Testes Unitários (Jest + JSDOM)
 Verificam:
 - Existência dos elementos
 - Clique no botão
@@ -43,7 +43,7 @@ Verificam:
 - Limpeza da lista
 - Renderização dos usuários
 
-### ✔ Testes Funcionais (Selenium)
+### Testes Funcionais (Selenium)
 Verificam:
 - Fluxo real de carregamento dos usuários
 - Abertura do link em nova aba
@@ -51,7 +51,7 @@ Verificam:
 
 ---
 
-## ⚙ Como Rodar o Projeto
+## Como Rodar o Projeto
 
 ### Celecione o arquivo
 ```bash
@@ -82,6 +82,7 @@ npm run test:functional
 ```bash
 npm run test:all
 ```
+---
 
 ### Como funciona o script
 
