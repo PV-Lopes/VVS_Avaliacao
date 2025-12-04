@@ -21,17 +21,17 @@ O foco principal é demonstrar **boas práticas de testes**, incluindo:
 
 ## Estrutura do Projeto
 
-/project
-│── index.html
-│── script.js
-│── style.css
-│── package.json
-│── jest.config.js
-│── README.md
-│
-└── tests
-│── jester.test.js
-│── selenium.functional.test.js
+/project<br>
+│── index.html <br>
+│── script.js <br>
+│── style.css <br>
+│── package.json <br>
+│── jest.config.js <br>
+│── README.md <br>
+│ <br>
+└── tests <br>
+│── jester.test.js <br>
+│── selenium.functional.test.js <br>
 
 ## Tipos de Testes
 
