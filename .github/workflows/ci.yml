@@ -23,7 +23,7 @@ jobs:
         run: npm ci || npm install
 
       - name: Run Jest unit tests
-        run: npm run test:unit
+        run: npx jest
 
 
   functional-tests:
@@ -67,8 +67,3 @@ jobs:
           SITE_URL: http://localhost:8080
         run: xvfb-run -a npm run test:functional
 
-      - name: Run jest
-        env:
-          SITE_URL: http://localhost:8080
-        run: npx jest
-      
