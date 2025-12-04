@@ -1,28 +1,39 @@
+/**
+ * @jest-environment jsdom
+ */
+
 const fs = require('fs');
 const path = require('path');
 
-const html = fs.readFileSync(
-  path.resolve(__dirname, '..', 'index.html'),
-  'utf8'
-);
+let html;
+
+// Carrega o HTML apenas uma vez
+beforeAll(() => {
+  html = fs.readFileSync(path.resolve(__dirname, '..', 'index.html'), 'utf8');
+});
 
 describe('Frontend - User Generator (unit)', () => {
   let consoleErrorSpy;
   let originalFetch;
 
   beforeEach(() => {
+    // injeta HTML
     document.documentElement.innerHTML = html;
+
     jest.resetModules();
 
-    // DISPARAR O DOMContentLoaded ANTES DO REQUIRE
-    document.dispatchEvent(new Event("DOMContentLoaded"));
-
+    // Mock fetch
     global.fetch = jest.fn();
     originalFetch = global.fetch;
 
     consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-});
 
+    // CARREGA O script.js ANTES DE DISPARAR DOMContentLoaded
+    require('../script.js');
+
+    // Agora sim dispara
+    document.dispatchEvent(new Event("DOMContentLoaded"));
+  });
 
   afterEach(() => {
     global.fetch = originalFetch;
@@ -30,7 +41,6 @@ describe('Frontend - User Generator (unit)', () => {
   });
 
   test('button exists', () => {
-    require('../script.js');
     const btn = document.getElementById('load-users');
     expect(btn).not.toBeNull();
   });
@@ -45,13 +55,15 @@ describe('Frontend - User Generator (unit)', () => {
       json: () => Promise.resolve(fakeData)
     });
 
-    require('../script.js');
-
     document.getElementById("load-users").click();
 
+    // Resolve todas as Promises
     await Promise.resolve();
-    await Promise.resolve(); // ← necessário
     await Promise.resolve();
+    await Promise.resolve();
+
+    const list = document.getElementById("users-list");
+    expect(list.children.length).toBe(2);
   });
 
   test('list is cleared', async () => {
@@ -64,8 +76,6 @@ describe('Frontend - User Generator (unit)', () => {
     global.fetch.mockResolvedValue({
       json: () => Promise.resolve(fakeData)
     });
-
-    require('../script.js');
 
     document.getElementById("load-users").click();
 
