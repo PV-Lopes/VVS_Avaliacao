@@ -1,0 +1,104 @@
+/* Roboto font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Stilo Basico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: #3498db;
+    padding: 20px 0;
+}
+
+.navbar .logo {
+    color: white;
+    font-size: 24px;
+    text-align: center;
+}
+
+.content {
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-top: 40px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+.user-list {
+    margin-top: 30px;
+}
+
+.user {
+    background-color: #fafafa;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user h3 {
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+.user p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.user a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.user a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #3498db;
+    color: white;
+    margin-top: 40px;
+    border-radius: 0 0 10px 10px;
+}
