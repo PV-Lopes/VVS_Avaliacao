@@ -58,8 +58,9 @@ jobs:
       # Servir site localmente
       - name: Start server
         run: |
-          npx http-server -p 8080 &
-          sleep 2
+          npx http-server . -p 8080 &
+          sleep 3
+
 
       # Executa testes funcionais
       - name: Run Selenium functional tests
