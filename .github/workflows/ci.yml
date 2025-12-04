@@ -65,9 +65,17 @@ jobs:
       # SUBIR SERVIDOR LOCAL SERVINDO A RAIZ
       - name: Start Local Server
         run: |
-          npx http-server -p 8080 &
-          echo "Aguardando servidor subir..."
-          sleep 10
+          echo "Iniciando servidor..."
+          nohup npx http-server -p 8080 > server.log 2>&1 &
+          sleep 5
+          echo "Conteúdo do server.log:"
+          cat server.log || true
+
+      - name: Test connection to server
+        run: |
+          echo "Testando curl..."
+          curl -v http://localhost:8080 || exit 1
+
 
       # RODAR SELENIUM FUNCIONAL
       - name: Run Selenium Functional Tests
